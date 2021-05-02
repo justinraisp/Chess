@@ -25,12 +25,19 @@ def main():
     stanje = model.StanjeIgre()
     print(stanje.plosca)
     nalozi_slike() # To naredimo samo enkrat
+    izbrani_kvadrat = () # Na zacetku ni noben izbran
+    igralec_klikne = []  
 
     deluje = True
     while deluje:
         for e in p.event.get():
             if e.type == p.QUIT:
                 deluje = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                lokacija = p.mouse.get_pos() # (x,y) lokacija miske
+                stolpec = lokacija[0] // VELIKOST_KVADRATA
+                vrstica = lokacija[1] // VELIKOST_KVADRATA
+
         narisi_stanje_igre(zaslon, stanje)
         ura.tick(MAX_FPS)
         p.display.flip()
