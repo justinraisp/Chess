@@ -1,3 +1,4 @@
+from re import M
 from chess import piece_name
 import pygame as p
 import ChessEngine
@@ -19,6 +20,39 @@ def main():
     p.init()
     screen = p.display.set_mode((WIDTH, HEIGHT))
     clock = p.time.Clock()
-    
+    screen.fill(p.Color("white"))
+    gs = ChessEngine.GameState()
+    loadImages() #nardimo samo enkrat
+    running = True
+    while running:
+        for e in p.event.get():
+            if e.type == p.QUIT:
+                running = False
+        drawGameState(screen, gs)
+        clock.tick(MAX_FPS)
+        p.display.flip()
 
-    
+
+# Funkcije za prikaz boarda skozi igro, zgornji levi kvadrat je vedno bel
+
+def drawGameState(screen, gs):
+    drawBoard(screen) #narise kvadrate na board
+    drawPieces(screen, gs.board) #narise figure na kvadrate
+
+
+def drawBoard(screen): 
+    colors = [p.Color("white"), p.Color("brown")]
+    for r in range(DIMENSION):
+        for c in range(DIMENSION):
+            color = colors[((r+c) % 2)]
+            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+def drawPieces(screen, board):
+    for r in range(DIMENSION):
+        for c in range(DIMENSION):
+            piece = board[r][c]
+            if piece != "--":
+                screen.blit(IMAGES[piece],p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+
+main()
